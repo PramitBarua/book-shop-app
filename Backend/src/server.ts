@@ -1,7 +1,6 @@
-
 import mongoose from "mongoose";
-import config from './config';
-import app from './app';
+import config from '@src/config';
+import app from '@src/app';
 
 const DB = config.DATABASE.replace('<PASSWORD>', config.PASSWORD);
 

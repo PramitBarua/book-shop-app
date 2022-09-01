@@ -1,7 +1,7 @@
 import express from 'express';
-import AppError from './utils/appError';
-import globalErrorHandler from './controllers/errorController';
-import categoryRoutes from './routes/categoryRoutes'
+import AppError from '@src/utils/appError';
+import globalErrorHandler from '@src/controllers/errorController';
+import categoryRoutes from '@src/routes/categoryRoutes'
 
 const app = express();
 app.use(express.json());

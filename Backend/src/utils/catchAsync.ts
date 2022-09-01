@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import AppError from './appError';
+import AppError from '@src/utils/appError';
 
 export default (fn:Function) => {
   return (req:Request, res:Response, next:NextFunction) => {

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import catchAsync from './../utils/catchAsync';
-import Category from './../models/categoryModels';
+import catchAsync from '@src/utils/catchAsync';
+import Category from '@src/models/categoryModels';
 
 const getAllCategory = catchAsync(async (req:Request, res:Response, next:NextFunction) => {
   const category = await Category.find();
