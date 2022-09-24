@@ -1,5 +1,14 @@
+import mongoose from 'mongoose';
 import { Request, Response, NextFunction } from 'express';
 import AppError from '@src/utils/appError';
+
+const handleCastError = (err:mongoose.Error.CastError) => {
+  return new AppError(`id ${err.value} is invalid`, 400);
+}
+
+const handleValidationError = (err:mongoose.Error.ValidationError) => {
+  return new AppError(err.message, 400)
+}
 
 const sendErrorDev = (err:AppError, res:Response) => {
   res.status(err.statusCode).json({
@@ -19,7 +28,7 @@ const sendErrorProd = (err:AppError, res:Response) => {
     });
   // programming or other unknown error: don't leak error details
   } else {
-    // log the error in 
+    // log the error
     console.error('error', err)
 
     // send the a generic message to the client
@@ -30,8 +39,7 @@ const sendErrorProd = (err:AppError, res:Response) => {
   }
 }
 
-const globalErrorHandler = (err:AppError, req:Request, res:Response, next:NextFunction) => {
-  // by giving 4 parameters express autometically knows it is an error handling middlewire
+const globalErrorHandler = (err:any, req:Request, res:Response, next:NextFunction) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'error';
 
@@ -39,6 +47,9 @@ const globalErrorHandler = (err:AppError, req:Request, res:Response, next:NextFu
     sendErrorDev(err, res);
   } else if (process.env.NODE_ENV === 'production') {
     let error = err;
+
+    if (err.name === 'CastError') error = handleCastError(err)
+    if (err.name === 'ValidationError') error = handleValidationError(err)
     sendErrorProd(error, res);
   }
 }
